@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Ismi — Ultimate 💙</title>
+
+  <style>
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      background: radial-gradient(circle at top, #050b2e, #000);
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
+      overflow: hidden;
+    }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 30px;
+    }
+
+    .scene.active {
+      display: flex;
+      animation: fade 1.5s
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    h1 {
+      font-size: 42px;
+      text-shadow: 0 0 25px #1e90ff
+    }
+
+    p {
+      font-size: 20px;
+      max-width: 520px;
+      line-height: 1.8
+    }
+
+    button,
+    input {
+      margin-top: 20px;
+      padding: 12px 30px;
+      border-radius: 30px;
+      border: none;
+      font-size: 16px;
+    }
+
+    button {
+      background: linear-gradient(135deg, #1e90ff, #000);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(30, 144, 255, .6);
+    }
+
+    input {
+      text-align: center;
+      font-size: 18px
+    }
+
+    img {
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid #1e90ff;
+      box-shadow: 0 0 30px #1e90ff;
+    }
+
+    .progress {
+      position: absolute;
+      bottom: 20px;
+      width: 70%;
+      height: 6px;
+      background: #222;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0%;
+      background: #1e90ff;
+      transition: 1s;
+    }
+
+    canvas {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="stars"></canvas>
+
+  <!-- SCENE 0 -->
+  <div class="scene active" id="s0">
+    <h1>🔒 Only One</h1>
+    <p>Satu nama. Satu hati.</p>
+    <input id="pw" placeholder="ketik nama">
+    <button onclick="unlock()">Masuk</button>
+  </div>
+
+  <!-- SCENE 1 -->
+  <div class="scene" id="s1">
+    <h1>Ismi 💙</h1>
+    <p>
+      Di antara miliaran manusia,<br>
+      semesta memilih namamu<br>
+      untuk menjadi istimewa.
+    </p>
+    <button onclick="next()">Lanjut</button>
+  </div>
+
+  <!-- SCENE 2 -->
+  <div class="scene" id="s2">
+    <img src="ismi.jpeg">
+    <p>
+      Ini bukan tentang hari ini saja,<br>
+      tapi tentang setiap hari<br>
+      di mana kamu tetap menjadi kamu.
+    </p>
+    <button onclick="next()">Lanjut</button>
+  </div>
+
+  <!-- SCENE 3 -->
+  <div class="scene" id="s3">
+    <h1>🔐 Surat Rahasia</h1>
+    <p>Masukkan kode kenangan</p>
+    <input id="code" placeholder="••••">
+    <button onclick="openLetter()">Buka</button>
+  </div>
+
+  <!-- SCENE 4 -->
+  <div class="scene" id="s4">
+    <h1>💌 Untukmu</h1>
+    <p>
+      Selamat ulang tahun, Ismi.<br><br>
+      Jika suatu hari dunia terasa berat,<br>
+      ingatlah…<br><br>
+      kamu pernah menjadi alasan<br>
+      seseorang percaya pada keajaiban 💙
+    </p>
+    <button onclick="next()">Akhiri</button>
+  </div>
+
+  <!-- SCENE 5 -->
+  <div class="scene" id="s5">
+    <h1>🎆 Selamat Ulang Tahun 🎆</h1>
+    <p>
+      Ini bukan akhir cerita.<br>
+      Ini awal dari bab yang lebih indah.
+    </p>
+    <button onclick="restart()">Ulangi</button>
+  </div>
+
+  <div class="progress">
+    <div class="bar" id="bar"></div>
+  </div>
+
+  <video id="music" loop hidden>
+    <source src="lagu.mp4" type="video/mp4">
+  </video>
+
+  <script>
+    let scene = 0;
+    const music = document.getElementById("music");
+    const bar = document.getElementById("bar");
+
+    function unlock() {
+      if (pw.value.toLowerCase() === "ismi") {
+        music.play();
+        next();
+      } else alert("Bukan kamu 🙂");
+    }
+
+    function next() {
+      document.getElementById("s" + scene).classList.remove("active");
+      scene++;
+      document.getElementById("s" + scene).classList.add("active");
+      bar.style.width = (scene / 5 * 100) + "%";
+    }
+
+    function openLetter() {
+      if (code.value === "1702") next();
+      else alert("Kode kenangan salah");
+    }
+
+    function restart() {
+      document.getElementById("s" + scene).classList.remove("active");
+      scene = 1;
+      document.getElementById("s1").classList.add("active");
+      bar.style.width = "20%";
+    }
+
+    // STAR BACKGROUND
+    const c = document.getElementById("stars"), x = c.getContext("2d");
+    c.width = innerWidth; c.height = innerHeight;
+    let s = [];
+
+    function star() {
+      s.push({
+        x: Math.random() * c.width,
+        y: Math.random() * c.height,
+        r: Math.random() * 2 + 1,
+        o: Math.random()
+      });
+    }
+
+    function anim() {
+      x.fillStyle = "rgba(0,0,0,.4)";
+      x.fillRect(0, 0, c.width, c.height);
+      s.forEach((p, i) => {
+        x.fillStyle = "rgba(30,144,255," + p.o + ")";
+        x.beginPath();
+        x.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        x.fill();
+        p.y += .2;
+        if (p.y > c.height) s.splice(i, 1);
+      });
+      requestAnimationFrame(anim);
+    }
+
+    setInterval(star, 100);
+    anim();
+  </script>
+
+</body>
+
+</html>
